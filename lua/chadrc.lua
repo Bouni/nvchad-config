@@ -5,6 +5,7 @@
 ---@type ChadrcConfig
 local M = {}
 
+
 M.base46 = {
 	theme = "doomchad",
 
@@ -13,5 +14,7 @@ M.base46 = {
 	-- 	["@comment"] = { italic = true },
 	-- },
 }
+
+require("configs.filetypes")
 
 return M
