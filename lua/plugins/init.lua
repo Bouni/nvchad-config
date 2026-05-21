@@ -21,6 +21,9 @@ return {
         "lua",
         "vimdoc",
         "html",
+        "javascript",
+        "typescript",
+        "vue",
         "css",
         "python",
         "markdown",
@@ -50,6 +53,18 @@ return {
         exclude_filetypes = {},
         exclude_buftypes = {},
       }
+    end,
+  },
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    lazy = false,
+    config = function()
+      require("ts_context_commentstring").setup {
+        enable_autocmd = false,
+      }
+
+      -- This single line hooks it into Neovim's native commenting engine
+      vim.g.skip_ts_context_commentstring_module = true
     end,
   },
 }
