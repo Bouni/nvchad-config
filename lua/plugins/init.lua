@@ -67,4 +67,11 @@ return {
       vim.g.skip_ts_context_commentstring_module = true
     end,
   },
+  {
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup()
+    end,
+  },
 }
