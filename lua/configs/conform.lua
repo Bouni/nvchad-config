@@ -8,6 +8,7 @@ local options = {
     c = { "clang-format" },
     cpp = { "clang-format" },
     caddy = { "caddy" },
+    go = { "goimports", "gofumpt" },
   },
   formatters = {
     caddy = { -- added
