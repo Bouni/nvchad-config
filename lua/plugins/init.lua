@@ -1,11 +1,10 @@
 return {
   {
     "stevearc/conform.nvim",
-    -- event = 'BufWritePre', -- uncomment for format on save
+    event = "BufWritePre",
     opts = require "configs.conform",
   },
 
-  -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -13,20 +12,57 @@ return {
     end,
   },
 
+  -- nvim-treesitter `main` branch: no ensure_installed / highlight modules anymore,
+  -- parsers are installed via install() (needs tree-sitter CLI) and highlighting is started per buffer
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
+    build = ":TSUpdate",
+    config = function(_, opts)
+      require "nvchad.configs.treesitter" -- loads base46 syntax/treesitter highlights
+
+      -- scheduled so nvchad.options has added mason/bin (tree-sitter CLI) to PATH
+      vim.schedule(function()
+        if vim.fn.executable "tree-sitter" == 1 then
+          require("nvim-treesitter").install(opts.ensure_installed)
+        else
+          vim.notify("tree-sitter CLI not found, can't install parsers", vim.log.levels.WARN)
+        end
+      end)
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter_start", { clear = true }),
+        callback = function(args)
+          pcall(vim.treesitter.start, args.buf)
+        end,
+      })
+    end,
     opts = {
       ensure_installed = {
         "vim",
         "lua",
+        "luadoc",
+        "printf",
+        "query",
         "vimdoc",
         "html",
+        "css",
         "javascript",
         "typescript",
+        "tsx",
         "vue",
-        "css",
+        "json",
+        "yaml",
+        "bash",
         "python",
+        "c",
+        "cpp",
+        "go",
+        "gomod",
+        "gosum",
         "markdown",
+        "markdown_inline",
         "caddy",
       },
     },
@@ -35,43 +71,16 @@ return {
   {
     "brenoprata10/nvim-highlight-colors",
     event = "BufReadPre",
-    config = function()
-      require("nvim-highlight-colors").setup {
-        -- Render style
-        render = "background", -- or 'foreground' or 'virtual'
-
-        -- Set virtual symbol (only used in virtual render mode)
-        virtual_symbol = "■",
-
-        -- Highlight named colors, like 'green'
-        enable_named_colors = true,
-
-        -- Highlight tailwind colors, e.g. 'bg-blue-500'
-        enable_tailwind = false,
-
-        -- Exclude filetypes or buftypes from being highlighted
-        exclude_filetypes = {},
-        exclude_buftypes = {},
-      }
-    end,
+    opts = {
+      render = "background",
+      enable_named_colors = true,
+      enable_tailwind = false,
+    },
   },
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    lazy = false,
-    config = function()
-      require("ts_context_commentstring").setup {
-        enable_autocmd = false,
-      }
 
-      -- This single line hooks it into Neovim's native commenting engine
-      vim.g.skip_ts_context_commentstring_module = true
-    end,
-  },
   {
     "kylechui/nvim-surround",
     event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup()
-    end,
+    opts = {},
   },
 }

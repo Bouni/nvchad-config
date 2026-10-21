@@ -3,6 +3,10 @@ local options = {
     lua = { "stylua" },
     css = { "prettier" },
     html = { "prettier" },
+    javascript = { "prettier" },
+    typescript = { "prettier" },
+    json = { "prettier" },
+    markdown = { "prettier" },
     vue = { "prettier" },
     python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
     c = { "clang-format" },
@@ -11,7 +15,7 @@ local options = {
     go = { "goimports", "gofumpt" },
   },
   formatters = {
-    caddy = { -- added
+    caddy = {
       command = "caddy",
       args = { "fmt", "-" },
       stdin = true,
@@ -20,7 +24,7 @@ local options = {
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
 }
 
